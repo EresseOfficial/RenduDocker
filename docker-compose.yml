@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  react-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./build:/app/build
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./build:/usr/share/nginx/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
