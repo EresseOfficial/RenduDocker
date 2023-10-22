@@ -52,27 +52,69 @@ const RuleForm = ({ rules, setRules }) => {
       return false;
     }
   }
-  function submitForm(event) {
+
+  // LOCAL CODE HERE //
+  // function submitForm(event) {
+  //   event.preventDefault();
+  //   if (confirm("Une nouvelle règle va être créée ") === true) {
+  //     let tempRules = [
+  //       ...rules,
+  //       {
+  //         id: rules[rules.length - 1].id + 1,
+  //         title: fields.title,
+  //         description: fields.description,
+  //         likes: 0,
+  //         dislikes: 0,
+  //         tags: []
+  //       }
+  //     ];
+  //     setRules(tempRules);
+  //     console.log(tempRules);
+  //     navigate("/");
+  //   } else {
+  //     console.log("annulé");
+  //   }
+  // }
+
+    // NEW CODE TO FETCH DATA FROM API //
+  const submitForm = async (event) => {
     event.preventDefault();
-    if (confirm("Une nouvelle règle va être créée ") === true) {
-      let tempRules = [
-        ...rules,
-        {
-          id: rules[rules.length - 1].id + 1,
-          title: fields.title,
-          description: fields.description,
-          likes: 0,
-          dislikes: 0,
-          tags: []
-        }
-      ];
-      setRules(tempRules);
-      console.log(tempRules);
+    try {
+      // Preparing data for new rule.
+      const newRule = {
+        id: rules[rules.length - 1].id + 1,
+        title: fields.title,
+        description: fields.description,
+        likes: 0,
+        dislikes: 0,
+        tags: []
+      };
+
+      // Send a POST request to API.
+      const response = await fetch('http://localhost:3000/api/rules', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRule),
+      });
+
+      if (!response.ok) {
+        // if the response is not 200, we throw an error
+        throw new Error('Network response was not ok');
+      }
+
+      // get the newly created rule from the response
+      const createdRule = await response.json();
+
+      // add the newly created rule to the list of rules
+      setRules([...rules, createdRule]);
       navigate("/");
-    } else {
-      console.log("annulé");
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
     }
-  }
+  };
+
 
   return (
     <form onSubmit={submitForm}>
