@@ -12,6 +12,7 @@ To install the Golden Rules Project, follow these steps:
 
 1. Clone the repository to your local machine with the command ```git clone <your-repository-url>```.
 2. Navigate to the project directory in your terminal with the command ```cd <your-project-directory>```.
+3. If the node_modules folder is missing in your project directory, or if your project has missing dependencies, install them with the command ```npm install``` in the project root directory, and the backend directory.
 
 To start the application with Docker, execute the following command in the project root directory:
 ``` docker compose up --build ```
